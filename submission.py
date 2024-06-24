@@ -1,10 +1,13 @@
 import argparse
+import pandas as pd
+
+from src.pdf import process_pdf
 
 
-def main():
-    """Write the entrypoint to your submission here"""
-    # TODO - import and execute your code here. Please put business logic into repo/src
-    raise NotImplementedError
+def main(filepath: str):
+    encounters = process_pdf(filepath)
+    df = pd.DataFrame(encounters)
+    df.to_csv('data/output/results.csv', index=False)
 
 
 if __name__ == '__main__':
@@ -12,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('--path-to-case-pdf',
                         metavar='path',
                         type=str,
-                        help='Path to local test case with which to run your code')
+                        help='Path to local test case with which to run your code'
+                        )
     args = parser.parse_args()
-    main()
+    main(args.path_to_case_pdf)

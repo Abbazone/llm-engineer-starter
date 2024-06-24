@@ -4,3 +4,5 @@
 **/.env
 .idea/
 .DS_Store
+.json
+/notebooks/.ipynb_checkpoints
