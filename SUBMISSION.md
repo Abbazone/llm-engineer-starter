@@ -39,16 +39,19 @@ The pipeline steps are as follows:
 
 ## Technical details
 To overcome the 15 pages limitation of DocumentAI, the main PDF document was divided into multiple smaller documents.
-The resultant documents were then processed by DocumentAI and document text is combined. 
+The resultant documents were then processed by DocumentAI and document text is combined. The decision to create a copy
+of the document text with numbered lines proved useful as it allowed filtering and preprocessing without impacting the order.
 
-The initial attempt of extracting medical encounters from the document text resulted in many 'false encounters'. 
-To mitigate this, we applied two filters:
+The initial attempt of extracting medical encounters from the document text resulted in many 'false encounters', these 
+are simply lines of text without useful content like 'TO:' or 'SECTION'. To mitigate this, we applied two filters:
 1. Filter very short lines (< 6 characters)
 2. Filter text without digits.
 
 We used the following extractors to extract useful medical information from the encounter based chunks:
 - An extractor to extract a timestamp from an encounter chunk.
 - An extractor to extract medical findings from an encounter chunk.
+
+Note that extractors can anything like a keyword extractor, entity extractor and not just LLM.
 
 For the timestamp extractor, some dates were extracted incorrectly due US date format “mm-dd-yyyy”. This issue was fixed by providing some examples in the prompt. 
 For the medical findings extractor, we found that the use of CoT is helpful when extracting medical findings.
@@ -57,5 +60,3 @@ For the medical findings extractor, we found that the use of CoT is helpful when
 Overall the pipeline seems to be effective in extracting useful information from the patient's with potential for further improvements.
 Improvements can be achieved through removal of duplicate records, incorporating common information such as DOB and document print date as metadata to be used for filtering.
 One can also consider the use of specialists LLM fine-tuned on medical records to improve the data extraction.
-
-
